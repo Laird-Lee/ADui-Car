@@ -10,7 +10,7 @@ type RequestOptions = {
   data?: any;
 };
 
-function useRequest(delay = 0) {
+function useHttp(delay = 0) {
   const data = ref<unknown>(null);
   const err = ref<unknown>(null);
   const loading = ref(false);
@@ -121,4 +121,4 @@ function formatParameter(url: string, params: any) {
   };
 }
 
-export { useRequest };
+export { useHttp };
