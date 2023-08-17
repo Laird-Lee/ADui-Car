@@ -14,7 +14,7 @@ function useRequest(delay = 0) {
   const data = ref<unknown>(null);
   const err = ref<unknown>(null);
   const loading = ref(false);
-  const debouncedRequest = _.debounce(request, delay);
+  const http = _.debounce(request, delay);
 
   const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
@@ -23,14 +23,20 @@ function useRequest(delay = 0) {
 
   axiosInstance.interceptors.request.use(
     (config) => {
-      if (config.params) {
-        for (const key in config.params) {
-          if (Object.prototype.hasOwnProperty.call(config.params, key)) {
-            config.params[key] = encodeURIComponent(config.params[key]);
+      const originParams = _.cloneDeep(config.params);
+      if (originParams) {
+        for (const key in originParams) {
+          if (Object.prototype.hasOwnProperty.call(originParams, key)) {
+            originParams[key] = encodeURIComponent(originParams[key]);
           }
         }
         if (config.method === HttpMethod.GET) {
-          config.params = _.assign(config.params, { _t: new Date().getTime() });
+          config.params = _.assign(originParams, { _t: new Date().getTime() });
+        }
+        if (config.url!.includes(':')) {
+          const { urlWithReplaced, modifyParams } = formatParameter(config.url!, originParams);
+          config.url = urlWithReplaced;
+          config.params = modifyParams;
         }
       }
       return config;
@@ -73,6 +79,7 @@ function useRequest(delay = 0) {
         antMessage.error(message);
       } else {
         console.error('网络错误或请求超时');
+        antMessage.error('网络错误或请求超时');
       }
       return Promise.reject(error);
     }
@@ -90,7 +97,28 @@ function useRequest(delay = 0) {
     }
   }
 
-  return { data, err, loading, debouncedRequest };
+  return { data, err, loading, http };
+}
+
+function formatParameter(url: string, params: any) {
+  const parameterIndex = url.lastIndexOf(':');
+
+  if (parameterIndex === -1) {
+    return {
+      urlWithReplaced: url,
+      modifyParams: { ...params }
+    };
+  }
+
+  const parameterKey = url.substring(parameterIndex + 1);
+  const urlWithReplaced = url.replace(/:[^/?]+/, params[parameterKey]);
+  const modifyParams = { ...params };
+  delete modifyParams[parameterKey];
+
+  return {
+    urlWithReplaced,
+    modifyParams
+  };
 }
 
 export { useRequest };
