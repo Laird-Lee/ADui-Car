@@ -4,7 +4,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import 'dayjs/locale/zh-cn';
 import { useLocaleStore } from '@/stores/locale';
 
-const store = useLocaleStore();
+const localesStore = useLocaleStore();
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const store = useLocaleStore();
         colorPrimary: '#67d3d5'
       }
     }"
-    :locale="store.locale === 'en' ? enUS : zhCN"
+    :locale="localesStore.locale === 'en' ? enUS : zhCN"
   >
     <router-view />
   </a-config-provider>
