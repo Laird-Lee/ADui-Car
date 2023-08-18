@@ -1,4 +1,4 @@
-// import './assets/main.css';
+import '@/assets/base.less';
 import 'ant-design-vue/dist/reset.css';
 
 import { createApp } from 'vue';

@@ -1,9 +1,17 @@
 const messages = {
-  home: {
-    title: 'Book Store',
-    hint: 'Computer Science And Software Engineering',
-    guessYouLike: 'Guess You Like',
+  login: {
+    title: 'ADui Car',
+    username: 'Username',
+    password: 'Password',
+    remember: 'Remember me',
+    forgot: 'Forgot password?',
+    login: 'Log in',
+    or: 'Or',
+    register: 'register now!',
+    account: 'Account',
+    wechat: 'Wechat',
+    mail: 'E-mail'
   }
-}
+};
 
-export default messages
+export default messages;

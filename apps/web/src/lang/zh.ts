@@ -1,9 +1,17 @@
 const messages = {
-  home: {
-    title: '书城',
-    hint: '计算机科学和软件工程',
-    guessYouLike: '猜你喜欢'
+  login: {
+    title: 'ADui 约车',
+    username: '用户名',
+    password: '密码',
+    remember: '记住我',
+    forgot: '忘记密码？',
+    login: '登录',
+    or: '或',
+    register: '立即注册！',
+    account: '账号',
+    wechat: '微信',
+    mail: '邮箱'
   }
-}
+};
 
-export default messages
+export default messages;
