@@ -2,9 +2,14 @@
 import enUS from 'ant-design-vue/es/locale/en_US';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import 'dayjs/locale/zh-cn';
-import { useLocaleStore } from '@/stores/locale';
+import { useLocaleStore } from '@/stores/locale.store';
+import { useI18n } from 'vue-i18n';
 
 const localesStore = useLocaleStore();
+const i18n = useI18n();
+onMounted(() => {
+  i18n.locale.value = localesStore.locale;
+});
 </script>
 
 <template>

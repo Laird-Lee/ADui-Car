@@ -1,7 +1,7 @@
-export { useWebSocket } from '@/hooks/useWebSocket';
+export { useHttp } from '@/hooks/useHttp.hook';
 
-export { useSessionStorage } from '@/hooks/useSessionStorage';
+export { useSessionStorage } from '@/hooks/useSessionStorage.hook';
 
-export { useLocalStorage } from '@/hooks/useLocalStorage';
+export { useLocalStorage } from '@/hooks/useLocalStorage.hook';
 
-export { useHttp } from '@/hooks/useHttp';
+export { useWebSocket } from '@/hooks/useWebSocket.hook';

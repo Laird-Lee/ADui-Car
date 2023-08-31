@@ -8,9 +8,9 @@ import {
   LockOutlined
 } from '@ant-design/icons-vue';
 import { useI18n } from 'vue-i18n';
-import { useLocalStorage } from '@/hooks';
-import type { Dayjs } from 'dayjs';
-import { useLocaleStore } from '@/stores/locale';
+import { useLocaleStore } from '@/stores/locale.store';
+import { useHttp } from '@/hooks';
+import { userApis } from '@/api/user.api';
 
 interface FormState {
   username: string;
@@ -40,12 +40,17 @@ const toggleLang = (locale: string) => {
   setLocale(locale);
 };
 
-const value1 = ref<Dayjs>();
+const activeType = ref<string>('password');
+const handleActiveType = (type: string) => {
+  activeType.value = type;
+};
+const { http } = useHttp();
+http(userApis.getUserInfoById);
 </script>
 
 <template>
   <div class="login_bg">
-    <a-card hoverable :title="$t('login.title')">
+    <a-card hoverable :title="$t('login.title')" :bodyStyle="{ height: '300px' }">
       <template #extra>
         <a-dropdown :trigger="['click']" placement="bottom">
           <a style="font-size: 18px">
@@ -64,6 +69,7 @@ const value1 = ref<Dayjs>();
         </a-dropdown>
       </template>
       <a-form
+        v-if="activeType === 'password'"
         :model="formState"
         name="normal_login"
         layout="vertical"
@@ -95,14 +101,14 @@ const value1 = ref<Dayjs>();
           </a-input-password>
         </a-form-item>
 
-        <a-form-item label=" " :colon="false">
+        <a-form-item>
           <a-form-item name="remember" no-style>
             <a-checkbox v-model:checked="formState.remember">{{ $t('login.remember') }}</a-checkbox>
           </a-form-item>
           <a class="login-form-forgot" href="">{{ $t('login.forgot') }}</a>
         </a-form-item>
 
-        <a-form-item label=" " :colon="false">
+        <a-form-item>
           <a-button
             :disabled="disabled"
             type="primary"
@@ -115,16 +121,25 @@ const value1 = ref<Dayjs>();
           <a href="">{{ $t('login.register') }}</a>
         </a-form-item>
       </a-form>
+
+      <div style="display: flex; justify-content: center; align-items: center">
+        <a-qrcode
+          v-if="activeType === 'wechat'"
+          :size="250"
+          value="https://next.antdv.com/components/qrcode-cn"
+        />
+      </div>
+
       <template #actions>
-        <div key="password">
+        <div key="password" @click="handleActiveType('password')">
           <key-outlined />
           {{ $t('login.account') }}
         </div>
-        <div key="wechat">
+        <div key="wechat" @click="handleActiveType('wechat')">
           <wechat-outlined />
           {{ $t('login.wechat') }}
         </div>
-        <div key="email">
+        <div key="email" @click="handleActiveType('email')">
           <mail-outlined />
           {{ $t('login.mail') }}
         </div>

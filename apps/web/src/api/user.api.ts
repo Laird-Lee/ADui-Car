@@ -1,5 +1,4 @@
 import { HttpMethod } from '@/enums';
-// import type { IApiInterface } from '@/api/index';
 
 export const userApis = {
   register: {

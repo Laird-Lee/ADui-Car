@@ -21,6 +21,8 @@ function useHttp(delay = 0) {
     timeout: 60000
   });
 
+  const router = useRouter();
+
   axiosInstance.interceptors.request.use(
     (config) => {
       const originParams = _.cloneDeep(config.params);
@@ -62,15 +64,18 @@ function useHttp(delay = 0) {
             break;
           case 401:
             message = '未授权：Unauthorized';
+            router.push('/401');
             break;
           case 403:
             message = '禁止访问：Forbidden';
             break;
           case 404:
             message = '资源不存在：Not Found';
+            router.push('/404');
             break;
           case 500:
             message = '服务器错误：Internal Server Error';
+            router.push('/500');
             break;
           // 可以根据需要添加更多状态码的处理
           default:
@@ -85,13 +90,23 @@ function useHttp(delay = 0) {
     }
   );
 
-  async function request(options: RequestOptions) {
+  async function request(
+    options: RequestOptions,
+    successCallback?: (data: any) => void,
+    errorCallback?: (error: any) => void
+  ) {
     loading.value = true;
     try {
       const response = await axiosInstance(options);
       data.value = response.data;
+      if (successCallback) {
+        successCallback(response.data);
+      }
     } catch (e) {
       err.value = e;
+      if (errorCallback) {
+        errorCallback(e);
+      }
     } finally {
       loading.value = false;
     }
